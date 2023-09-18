@@ -1,40 +1,45 @@
-function decadeTickPositioner() {
-    const positions = []
-    let i;
-
-    for(i = 20; i <= 100; i += 10) {
-        positions.push(i);
-    }
-
-    for(i = 200; i <= 1000; i += 100) {
-        positions.push(i);
-    }
-
-    for(i = 2000; i <= 10000; i += 1000) {
-        positions.push(i);
-    }
-
-    for(i = 20000; i <= 200000; i += 10000) {
-        positions.push(i);
-    }
-
-    return positions;
-}
+// function decadeTickPositioner() {
+//     const positions = []
+//     let i;
+//
+//     for(i = 20; i <= 100; i += 10) {
+//         positions.push(i);
+//     }
+//
+//     for(i = 200; i <= 1000; i += 100) {
+//         positions.push(i);
+//     }
+//
+//     for(i = 2000; i <= 10000; i += 1000) {
+//         positions.push(i);
+//     }
+//
+//     for(i = 20000; i <= 200000; i += 10000) {
+//         positions.push(i);
+//     }
+//
+//     return positions;
+// }
 
 document.addEventListener('DOMContentLoaded', function () {
     const magnitudePlot = Highcharts.chart('magnitude-plot', {
         chart: {
             type: 'line',
-            zoomType: 'x',
-            // alignTicks: false
+            zoomType: 'x'
         },
         title: {
             text: ''
         },
         xAxis: {
-            // type: 'logarithmic',
-            // min: 20,
-            // max: 20000,
+            type: 'logarithmic',
+            lineColor: '#969696',
+            tickColor: '#969696',
+            labels: {
+                style: {
+                    color: '#969696',
+                }
+            },
+            crosshair: true,
             plotLines: [{
                 color: '#969696',
                 dashStyle: 'ShortDot',
@@ -47,8 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     textAlign: 'right',
                     y: -2
                 }
-            }],
-            tickPositioner: decadeTickPositioner
+            }]
         },
         yAxis: [{
             min: -18,
@@ -83,7 +87,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 y: -2
             }
         }],
-        legend: { enabled: false },
+        legend: {enabled: false},
+        tooltip: {
+            enabled: false
+        },
         series: [{
             name: 'Main',
             data: source1magnitude,
@@ -144,6 +151,14 @@ document.addEventListener('DOMContentLoaded', function () {
             text: ''
         },
         xAxis: {
+            type: 'logarithmic',
+            lineColor: '#969696',
+            tickColor: '#969696',
+            labels: {
+                style: {
+                    color: '#969696',
+                }
+            },
         },
         yAxis: {
             min: -180,
@@ -164,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         },
-        legend: { enabled: false },
+        legend: {enabled: false},
 
         series: [{
             name: 'Main',
