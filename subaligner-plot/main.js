@@ -206,4 +206,30 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         series: phaseSeriesData
     });
+
+    ['mousemove', 'touchmove', 'touchstart'].forEach(function (eventType) {
+        document.getElementById('magnitude-plot').addEventListener(eventType, function (e) {
+            const chart = phasePlot,
+                event = chart.pointer.normalize(e),
+                point = chart.series[0].searchPoint(event, true);
+
+            if (point) {
+                chart.xAxis[0].drawCrosshair(e, point);
+            }
+        });
+
+        document.getElementById('phase-plot').addEventListener(eventType, function (e) {
+            const chart = magnitudePlot,
+                event = chart.pointer.normalize(e),
+                point = chart.series[0].searchPoint(event, true);
+
+            if (point) {
+                chart.xAxis[0].drawCrosshair(e, point);
+            }
+        });
+    });
+
+    Highcharts.Pointer.prototype.reset = function () {
+        return undefined;
+    };
 });
