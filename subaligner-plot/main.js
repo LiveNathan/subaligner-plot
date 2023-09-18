@@ -1,25 +1,93 @@
-// function decadeTickPositioner() {
-//     const positions = []
-//     let i;
-//
-//     for(i = 20; i <= 100; i += 10) {
-//         positions.push(i);
-//     }
-//
-//     for(i = 200; i <= 1000; i += 100) {
-//         positions.push(i);
-//     }
-//
-//     for(i = 2000; i <= 10000; i += 1000) {
-//         positions.push(i);
-//     }
-//
-//     for(i = 20000; i <= 200000; i += 10000) {
-//         positions.push(i);
-//     }
-//
-//     return positions;
-// }
+const commonStates = {
+    states: {
+        hover: {
+            enabled: false
+        },
+        inactive: {
+            opacity: 1
+        }
+    }
+};
+
+let magnitudeSeriesData = [{
+    name: 'Main',
+    data: source1magnitude,
+    color: '#ffc8c8',
+    zoneAxis: 'x',
+    zones: [{
+        value: 60,
+        color: '#ffc8c8'
+    }, {
+        value: 100,
+        color: 'red',
+    }]
+}, {
+    name: 'Sub',
+    data: source2magnitude,
+    color: '#c8c8ff',
+    zoneAxis: 'x',
+    zones: [{
+        value: 60,
+        color: '#c8c8ff'
+    }, {
+        value: 100,
+        color: 'blue'
+    }]
+}, {
+    name: 'Target',
+    data: target,
+    color: 'black',
+    dashStyle: 'ShortDash'
+}, {
+    name: 'Sum',
+    data: sum,
+    color: 'magenta',
+    dashStyle: 'ShortDot'
+}, {
+    name: 'Main Coherence',
+    data: source1coherence,
+    yAxis: 1,
+    color: 'red',
+    dashStyle: 'Dot',
+    opacity: 0.5
+}, {
+    name: 'Sub Coherence',
+    data: source2coherence,
+    yAxis: 1,
+    color: 'blue',
+    dashStyle: 'Dot',
+    opacity: 0.5
+}];
+
+magnitudeSeriesData = magnitudeSeriesData.map(series => Highcharts.merge(series, commonStates));
+
+let phaseSeriesData = [{
+    name: 'Main',
+    data: source1phase,
+    color: '#ffc8c8',
+    zoneAxis: 'x',
+    zones: [{
+        value: 60,
+        color: '#ffc8c8'
+    }, {
+        value: 100,
+        color: 'red'
+    }]
+}, {
+    name: 'Sub',
+    data: source2phase,
+    color: '#c8c8ff',
+    zoneAxis: 'x',
+    zones: [{
+        value: 60,
+        color: '#c8c8ff'
+    }, {
+        value: 100,
+        color: 'blue'
+    }]
+}];
+
+phaseSeriesData = phaseSeriesData.map(series => Highcharts.merge(series, commonStates));
 
 document.addEventListener('DOMContentLoaded', function () {
     const magnitudePlot = Highcharts.chart('magnitude-plot', {
@@ -44,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 color: '#969696',
                 dashStyle: 'ShortDot',
                 width: 1,
-                value: 39,
+                value: 80,
                 label: {
                     text: 'c',
                     verticalAlign: 'bottom',
@@ -91,55 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tooltip: {
             enabled: false
         },
-        series: [{
-            name: 'Main',
-            data: source1magnitude,
-            color: '#ffc8c8',
-            zoneAxis: 'x',
-            zones: [{
-                value: 27,
-                color: '#ffc8c8'
-            }, {
-                value: 39,
-                color: 'red',
-            }]
-        }, {
-            name: 'Sub',
-            data: source2magnitude,
-            color: '#c8c8ff',
-            zoneAxis: 'x',
-            zones: [{
-                value: 27,
-                color: '#c8c8ff'
-            }, {
-                value: 54,
-                color: 'blue'
-            }]
-        }, {
-            name: 'Target',
-            data: target,
-            color: 'black',
-            dashStyle: 'ShortDash'
-        }, {
-            name: 'Sum',
-            data: sum,
-            color: 'magenta',
-            dashStyle: 'ShortDot'
-        }, {
-            name: 'Main Coherence',
-            data: source1coherence,
-            yAxis: 1,
-            color: 'red',
-            dashStyle: 'Dot',
-            opacity: 0.5
-        }, {
-            name: 'Sub Coherence',
-            data: source2coherence,
-            yAxis: 1,
-            color: 'blue',
-            dashStyle: 'Dot',
-            opacity: 0.5
-        }]
+        series: magnitudeSeriesData
     });
 
     const phasePlot = Highcharts.chart('phase-plot', {
@@ -159,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     color: '#969696',
                 }
             },
+            crosshair: true
         },
         yAxis: {
             min: -180,
@@ -180,31 +201,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
         legend: {enabled: false},
-
-        series: [{
-            name: 'Main',
-            data: source1phase,
-            color: '#ffc8c8',
-            zoneAxis: 'x',
-            zones: [{
-                value: 37,
-                color: '#ffc8c8'
-            }, {
-                value: 51,
-                color: 'red'
-            }]
-        }, {
-            name: 'Sub',
-            data: source2phase,
-            color: '#c8c8ff',
-            zoneAxis: 'x',
-            zones: [{
-                value: 37,
-                color: '#c8c8ff'
-            }, {
-                value: 57,
-                color: 'blue'
-            }]
-        }]
+        tooltip: {
+            enabled: false
+        },
+        series: phaseSeriesData
     });
 });
