@@ -34,7 +34,7 @@ let magnitudeSeriesData = [{
         color: 'blue'
     }]
 }, {
-    name: 'Target',
+    name: `Target (${targetBw}oct)`,
     data: target,
     color: 'black',
     dashStyle: 'ShortDash'
@@ -74,7 +74,7 @@ let phaseSeriesData = [{
         color: 'red'
     }]
 }, {
-    name: 'Sub',
+    name: `Sub (${source2delay}ms)`,
     data: source2phase,
     color: '#c8c8ff',
     zoneAxis: 'x',
@@ -90,6 +90,20 @@ let phaseSeriesData = [{
 phaseSeriesData = phaseSeriesData.map(series => Highcharts.merge(series, commonStates));
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    function syncExtremes(e) {
+        const thisChart = this.chart;
+        if (e.trigger !== 'syncExtremes') { // Prevent feedback loop
+            Highcharts.charts.forEach(function (chart) {
+                if (chart !== thisChart) {
+                    if(chart.xAxis[0].setExtremes) { // It is null while updating
+                        chart.xAxis[0].setExtremes(e.min <= 0 ? 1 : e.min, e.max, undefined, false, { trigger: 'syncExtremes' });
+                    }
+                }
+            });
+        }
+    }
+
     const magnitudePlot = Highcharts.chart('magnitude-plot', {
         chart: {
             type: 'line',
@@ -120,7 +134,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     textAlign: 'right',
                     y: -2
                 }
-            }]
+            }],
+            events: {
+                afterSetExtremes: syncExtremes
+            }
         },
         yAxis: [{
             min: -18,
@@ -179,7 +196,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     color: '#969696',
                 }
             },
-            crosshair: true
+            crosshair: true,
+            events: {
+                afterSetExtremes: syncExtremes
+            }
         },
         yAxis: {
             min: -180,
