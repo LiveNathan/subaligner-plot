@@ -9,31 +9,48 @@ const commonStates = {
     }
 };
 
-let magnitudeSeriesData = [{
-    name: 'Main',
-    data: source1magnitude,
-    color: '#ffc8c8',
-    zoneAxis: 'x',
-    zones: [{
-        value: 60,
-        color: '#ffc8c8'
-    }, {
-        value: 100,
-        color: 'red',
-    }]
-}, {
-    name: 'Sub',
-    data: source2magnitude,
-    color: '#c8c8ff',
-    zoneAxis: 'x',
-    zones: [{
-        value: 60,
-        color: '#c8c8ff'
-    }, {
-        value: 100,
-        color: 'blue'
-    }]
-}, {
+const colorPairs = {
+    red: { light: '#ffc8c8', dark: 'red'},
+    orange: { light: '#ffedcc', dark: 'orange'},
+    yellow: { light: '#ffffcc', dark: 'yellow'},
+    lime: { light: '#ccffcc', dark: 'lime'},
+    aqua: { light: '#ccffff', dark: 'aqua'},
+    indigo: { light:'#ccccff', dark: 'indigo'},
+    violet: { light:'#ebccff', dark: 'violet'},
+    blue: { light: '#c8c8ff', dark: 'blue'}
+};
+
+let magnitudeSeriesData = [];
+sources.forEach((source, i) => {
+    let sourceColor;
+    if (i === 0)
+        sourceColor = colorPairs.red;
+    else if (i === sources.length - 1)
+        sourceColor = colorPairs.blue;
+    else
+        sourceColor = colorPairs[Math.floor(Math.random() * colorPairs.length)];
+
+    magnitudeSeriesData.push({
+        name: `${i+1}`,
+        data: source.magnitude,
+        color: sourceColor.light,
+        zoneAxis: 'x',
+        zones: [
+            { value: xovrStart, color: sourceColor.light},
+            { value: xovrEnd, color: sourceColor.dark}
+        ]
+    });
+    magnitudeSeriesData.push({
+        name: `${i+1}`,
+        data: source.coherence,
+        yAxis: 1,
+        color: sourceColor.dark,
+        dashStyle: 'Dot',
+        opacity: 0.5
+    });
+});
+
+magnitudeSeriesData.push({
     name: `Target (${targetBw}oct)`,
     data: target,
     color: 'black',
@@ -43,51 +60,59 @@ let magnitudeSeriesData = [{
     data: sum,
     color: 'magenta',
     dashStyle: 'ShortDot'
-}, {
-    name: 'Main Coherence',
-    data: source1coherence,
-    yAxis: 1,
-    color: 'red',
-    dashStyle: 'Dot',
-    opacity: 0.5
-}, {
-    name: 'Sub Coherence',
-    data: source2coherence,
-    yAxis: 1,
-    color: 'blue',
-    dashStyle: 'Dot',
-    opacity: 0.5
-}];
-
+});
 magnitudeSeriesData = magnitudeSeriesData.map(series => Highcharts.merge(series, commonStates));
 
-let phaseSeriesData = [{
-    name: 'Main',
-    data: source1phase,
-    color: '#ffc8c8',
-    zoneAxis: 'x',
-    zones: [{
-        value: 60,
-        color: '#ffc8c8'
-    }, {
-        value: 100,
-        color: 'red'
-    }]
-}, {
-    name: `Sub (${source2delay}ms)`,
-    data: source2phase,
-    color: '#c8c8ff',
-    zoneAxis: 'x',
-    zones: [{
-        value: 60,
-        color: '#c8c8ff'
-    }, {
-        value: 100,
-        color: 'blue'
-    }]
-}];
+let phaseSeriesData = sources.map((source, i) => {
+    let sourceColor;
+    if (i === 0)
+        sourceColor = colorPairs.red;
+    else if (i === sources.length - 1)
+        sourceColor = colorPairs.blue;
+    else
+        sourceColor = colorPairs[Math.floor(Math.random() * colorPairs.length)];
 
+    return {
+        name: `${i+1}`,
+        data: source.phase,
+        color: sourceColor.light,
+        zoneAxis: 'x',
+        zones: [
+            { value: corridor60degStart, color: sourceColor.light},
+            { value: corridor60degEnd, color: sourceColor.dark }
+        ]
+    };
+});
 phaseSeriesData = phaseSeriesData.map(series => Highcharts.merge(series, commonStates));
+
+
+// let phaseSeriesData = [{
+//     name: 'Main',
+//     data: source1phase,
+//     color: '#ffc8c8',
+//     zoneAxis: 'x',
+//     zones: [{
+//         value: corridor60degStart,
+//         color: '#ffc8c8'
+//     }, {
+//         value: corridor60degEnd,
+//         color: 'red'
+//     }]
+// }, {
+//     name: `Sub (${source2delay}ms)`,
+//     data: source2phase,
+//     color: '#c8c8ff',
+//     zoneAxis: 'x',
+//     zones: [{
+//         value: corridor60degStart,
+//         color: '#c8c8ff'
+//     }, {
+//         value: corridor60degEnd,
+//         color: 'blue'
+//     }]
+// }];
+//
+// phaseSeriesData = phaseSeriesData.map(series => Highcharts.merge(series, commonStates));
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -126,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 color: '#969696',
                 dashStyle: 'ShortDot',
                 width: 1,
-                value: 80,
+                value: xovrCenter,
                 label: {
                     text: 'c',
                     verticalAlign: 'bottom',
