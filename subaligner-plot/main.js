@@ -173,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     color: '#969696'
                 }
             },
+            crosshair: true,
             labels: {
                 format: '{value}dB',
                 align: 'right',
@@ -230,6 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
             min: -180,
             max: 180,
             tickInterval: 60,
+            crosshair: true,
             title: {
                 text: 'Phase', reserveSpace: false, style: {
                     color: '#969696'
