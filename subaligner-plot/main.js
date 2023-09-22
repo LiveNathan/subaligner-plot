@@ -1,6 +1,7 @@
 if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources) || !sources.length) {
     console.error("Sources data missing or invalid. Unable to proceed.");
 } else {
+    const plotHeight = '30%';
     const commonStates = {
         states: {
             hover: {
@@ -114,7 +115,8 @@ if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources
         const magnitudePlot = Highcharts.chart('magnitude-plot', {
             chart: {
                 type: 'line',
-                zoomType: 'x'
+                zoomType: 'x',
+                height: plotHeight
             },
             title: {
                 text: ''
@@ -173,7 +175,6 @@ if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources
                 opposite: true,
                 min: 0,
                 max: 1,
-                // tickInterval: 0.5,
                 labels: {
                     align: 'right',
                     x: -6,
@@ -190,7 +191,8 @@ if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources
         const phasePlot = Highcharts.chart('phase-plot', {
             chart: {
                 type: 'line',
-                zoomType: 'x'
+                zoomType: 'x',
+                height: plotHeight
             },
             title: {
                 text: ''
