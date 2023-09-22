@@ -2613,41 +2613,57 @@ const transferFunctions = {
 
 let sources = [];
 
-for(let i = 0; i < transferFunctions.SOURCE_ALIGNED.length; i++) {
-    let source = transferFunctions.SOURCE_ALIGNED[i];
-    let sourceData = {
-        xValues: source.frequencyArray,
-        magnitudeYvalues: source.magnitudeArray,
-        phaseYvalues: source.phaseArray,
-        coherenceYvalues: source.coherenceArray,
+try {
+    for (let i = 0; i < transferFunctions.SOURCE_ALIGNED.length; i++) {
+        let source = transferFunctions.SOURCE_ALIGNED[i];
+        sources[i] = {
+            xValues: source.frequencyArray,
+            magnitudeYvalues: source.magnitudeArray,
+            phaseYvalues: source.phaseArray,
+            coherenceYvalues: source.coherenceArray,
 
-        magnitude: createPairs(source.frequencyArray, source.magnitudeArray),
-        phase: createPairs(source.frequencyArray, source.phaseArray),
-        coherence: createPairs(source.frequencyArray, source.coherenceArray)
+            magnitude: createPairs(source.frequencyArray, source.magnitudeArray),
+            phase: createPairs(source.frequencyArray, source.phaseArray),
+            coherence: createPairs(source.frequencyArray, source.coherenceArray)
+        };
     }
-
-    sources[i] = sourceData;
+} catch (e) {
+    console.error(e.message);
 }
 
-function createPairs(x, y) {
-    return y.map((item, index) => [x[index], item]);
+let sum;
+try {
+    const sumXvalues = transferFunctions.SUM[0].frequencyArray;
+    const sumYvalues = transferFunctions.SUM[0].magnitudeArray;
+    sum = createPairs(sumXvalues, sumYvalues);
+} catch (e) {
+    console.error(e.message);
 }
 
-const sumXvalues = transferFunctions.SUM[0].frequencyArray;
-const sumYvalues = transferFunctions.SUM[0].magnitudeArray;
+let target;
+try {
+    const targetXvalues = transferFunctions.TARGET[0].frequencyArray;
+    const targetYvalues = transferFunctions.TARGET[0].magnitudeArray;
+    target = createPairs(targetXvalues, targetYvalues);
+} catch (e) {
+    console.error(e.message);
+}
 
-const targetXvalues = transferFunctions.TARGET[0].frequencyArray;
-const targetYvalues = transferFunctions.TARGET[0].magnitudeArray;
-
-const corridor60degStart = transferFunctions.OTHER[0].transferFunctionDetailsDTO.corridor60degStart;
-const corridor60degEnd = transferFunctions.OTHER[0].transferFunctionDetailsDTO.corridor60degEnd;
-const xovrStart = transferFunctions.OTHER[0].transferFunctionDetailsDTO.xovrStart;
-const xovrEnd = transferFunctions.OTHER[0].transferFunctionDetailsDTO.xovrEnd;
-const xovrCenter = transferFunctions.OTHER[0].transferFunctionDetailsDTO.xovrCenter;
-const targetBw = parseFloat(transferFunctions.OTHER[0].transferFunctionDetailsDTO.bandwidth.toFixed(1));
-
-const sum = createPairs(sumXvalues, sumYvalues);
-const target = createPairs(targetXvalues, targetYvalues);
+let corridor60degStart, corridor60degEnd, xovrStart, xovrEnd, xovrCenter, targetBw;
+if (!transferFunctions || !transferFunctions.OTHER || !transferFunctions.OTHER[0] || !transferFunctions.OTHER[0].transferFunctionDetailsDTO) {
+    console.error('Relevant data is missing.');
+} else {
+    try {
+        corridor60degStart = transferFunctions.OTHER[0].transferFunctionDetailsDTO.corridor60degStart;
+        corridor60degEnd = transferFunctions.OTHER[0].transferFunctionDetailsDTO.corridor60degEnd;
+        xovrStart = transferFunctions.OTHER[0].transferFunctionDetailsDTO.xovrStart;
+        xovrEnd = transferFunctions.OTHER[0].transferFunctionDetailsDTO.xovrEnd;
+        xovrCenter = transferFunctions.OTHER[0].transferFunctionDetailsDTO.xovrCenter;
+        targetBw = parseFloat(transferFunctions.OTHER[0].transferFunctionDetailsDTO.bandwidth.toFixed(1));
+    } catch (e) {
+        console.error(e.message);
+    }
+}
 
 function createPairs(x, y) {
     return y.map((item, index) => [x[index], item]);
