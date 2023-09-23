@@ -1,4 +1,4 @@
-if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources) || !sources.length) {
+if (typeof sources === 'undefined' || !Array.isArray(sources) || !sources.length) {
     console.error("Sources data missing or invalid. Unable to proceed.");
 } else {
     const plotHeight = '30%';
@@ -40,8 +40,8 @@ if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources
             color: sourceColor.light,
             zoneAxis: 'x',
             zones: typeof xovrStart !== 'undefined' && typeof xovrEnd !== 'undefined' ? [
-                { value: xovrStart, color: sourceColor.light},
-                { value: xovrEnd, color: sourceColor.dark}
+                {value: xovrStart, color: sourceColor.light},
+                {value: xovrEnd, color: sourceColor.dark}
             ] : undefined,
         });
         magnitudeSeriesData.push({
@@ -90,8 +90,8 @@ if (typeof sources === 'undefined' || sources === null || !Array.isArray(sources
             color: sourceColor.light,
             zoneAxis: 'x',
             zones: typeof corridor60degStart !== 'undefined' && typeof corridor60degEnd !== 'undefined' ? [
-                { value: corridor60degStart, color: sourceColor.light},
-                { value: corridor60degEnd, color: sourceColor.dark}
+                {value: corridor60degStart, color: sourceColor.light},
+                {value: corridor60degEnd, color: sourceColor.dark}
             ] : undefined,
         };
     });
